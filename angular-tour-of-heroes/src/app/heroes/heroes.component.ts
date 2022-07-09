@@ -1,6 +1,6 @@
 import { Hero } from './../hero';
 import { Component, OnInit } from '@angular/core';
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -9,11 +9,25 @@ import { HEROES } from '../mock-heroes';
 })
 export class HeroesComponent implements OnInit {
 
-  heroes = HEROES;
+  // Declara uma variável heroes do tipo array Hero 
+  heroes: Hero[] = [];
 
-  constructor() { }
+  // Injeta service heroService
+  constructor(private heroService: HeroService) { }
 
   ngOnInit(): void {
+
+    // Chama o getHeroes() ao iniciar
+    // É uma boa prática chamar no ngOnInit pois garante que está sendo chamado após o constructor
+    this.getHeroes();
+
+  }
+
+  // Metodo que retorna os heróis da service
+  // Nessa versãmos subscribe para setar após o retorno do observable
+  getHeroes(): void {
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes);
   }
 
   selectedHero?: Hero;
