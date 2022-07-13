@@ -31,11 +31,12 @@ export class HeroesComponent implements OnInit {
         .subscribe(heroes => this.heroes = heroes);
   }
 
-  selectedHero?: Hero;
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponet say: You selected hero id=${hero.id}`);
-    console.log(this.selectedHero);
-  }
+  // Dead Code ----- Deixei para fins de consula
+  // selectedHero?: Hero;
+  // onSelect(hero: Hero): void {
+  //   this.selectedHero = hero;
+  //   this.messageService.add(`HeroesComponet say: You selected hero id=${hero.id}`);
+  //   console.log(this.selectedHero);
+  // }
 }
 

@@ -20,4 +20,11 @@ getHeroes(): Observable<Hero[]>{
   return heroes;//retorna um arr observable
 }
 
+getHero(id: Number): Observable<Hero>{
+  // HEROES.find(h => h.id === id) ----- Busca um herói na lista de herói que possua o mesmo id que chegou como parametro
+  const hero = HEROES.find(h => h.id === id)!;
+  this.messageService.add(`HeroService say: encontrado herói id: ${id}`)
+  return of(hero);
+}
+
 }
