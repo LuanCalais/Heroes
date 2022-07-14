@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Hero } from './hero';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service'; //service in service - Message service não está diretamente injetada em HeroComponent, mas sim na service hero.service
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
 
@@ -11,7 +12,14 @@ import { MessageService } from './message.service'; //service in service - Messa
 })
 export class HeroService {
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private http: HttpClient) { }
+
+  private heroesUrl = 'api/heroes'; //Url para in-memory-data-service.ts
+
+  // Seta uma mensagem vinda da heroService 
+private log(message: string){
+  this.messageService.add(`HeroService: ${message}`)
+}
 
 // Metodo da service que ira retornar um obsevable da lista dos heróis
 getHeroes(): Observable<Hero[]>{
