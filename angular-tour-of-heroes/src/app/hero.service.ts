@@ -5,6 +5,9 @@ import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service'; //service in service - Message service não está diretamente injetada em HeroComponent, mas sim na service hero.service
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+// Tratativa de erros para caso a API tenha algum problema nas requisições 
+import { catchError, map, tap } from 'rxjs';
+
 @Injectable({
 
 
@@ -19,9 +22,35 @@ export class HeroService {
     private http: HttpClient) { }
 
   // Metodo da service que ira retornar um obsevable da lista dos heróis
+  //  obs: of() && http.get() retornam um OBSERVABLE
   getHeroes(): Observable<Hero[]> {
     // Requisição http para pegar os heróis da API
-    return this.http.get<Hero[]>(this.heroesUrl);
+    return this.http.get<Hero[]>(this.heroesUrl).pipe(
+      catchError(this.handleError<Hero[]>('getHeroes',[]))
+    )
+
+    /*
+      catchError - Intercepta um erro encontrado no observable de consumo da API
+      handleError() - Reporta o erro, e retorna um resultado para que a aplicação continue funcionando
+    */
+  }
+
+
+  // @param operation - Nome da operação que parou
+  // @param result - valor opcional de retorno
+  private handleError<T>(operation = 'operation', result?: T){
+    return (error: any): Observable<T> => {
+
+      // Imprime no console o erro retornado
+      console.log(error);
+
+      // Uma maneira melhor de tratativa transformando o erro
+      this.log(`${operation} failed: ${error.message}`);
+
+      // Efetua um retorno vazio para que a aplicação siga funcionando
+      return of(result as T);
+
+    }
   }
 
 
