@@ -12,27 +12,31 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class HeroService {
 
-  constructor(private messageService: MessageService, private http: HttpClient) { }
-
   private heroesUrl = 'api/heroes'; //Url para in-memory-data-service.ts
 
+  constructor(
+    private messageService: MessageService,
+    private http: HttpClient) { }
+
+  // Metodo da service que ira retornar um obsevable da lista dos heróis
+  getHeroes(): Observable<Hero[]> {
+    // Requisição http para pegar os heróis da API
+    return this.http.get<Hero[]>(this.heroesUrl);
+  }
+
+
   // Seta uma mensagem vinda da heroService 
-private log(message: string){
-  this.messageService.add(`HeroService: ${message}`)
-}
+  private log(message: string) {
+    this.messageService.add(`HeroService: ${message}`)
+  }
 
-// Metodo da service que ira retornar um obsevable da lista dos heróis
-getHeroes(): Observable<Hero[]>{
-  const heroes = of(HEROES);
-  this.messageService.add('HeroService say: Heroes found!');
-  return heroes;//retorna um arr observable
-}
 
-getHero(id: Number): Observable<Hero>{
-  // HEROES.find(h => h.id === id) ----- Busca um herói na lista de herói que possua o mesmo id que chegou como parametro
-  const hero = HEROES.find(h => h.id === id)!;
-  this.messageService.add(`HeroService say: encontrado herói id: ${id}`)
-  return of(hero);
-}
+
+  getHero(id: Number): Observable<Hero> {
+    // HEROES.find(h => h.id === id) ----- Busca um herói na lista de herói que possua o mesmo id que chegou como parametro
+    const hero = HEROES.find(h => h.id === id)!;
+    this.messageService.add(`HeroService say: encontrado herói id: ${id}`)
+    return of(hero);
+  }
 
 }

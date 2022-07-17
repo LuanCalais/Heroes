@@ -5,7 +5,7 @@ import { Hero } from './hero';
 @Injectable({
   providedIn: 'root'
 })
-export class InMemoryDataService {
+export class InMemoryDataService implements InMemoryDbService{
 
   createDb(){
     const heroes = [
@@ -20,7 +20,8 @@ export class InMemoryDataService {
       {id: 18, name: 'Thor'}
     ];
 
-    return heroes;
+    // Retorno da API
+    return {heroes};
 
   }
 

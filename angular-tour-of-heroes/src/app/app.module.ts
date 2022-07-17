@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Retorna resposta simuladas de requisições HTTP
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDbService } from 'angular-in-memory-web-api';
 // ##############################################
 
 import { NgModule } from '@angular/core';
