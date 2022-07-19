@@ -95,6 +95,7 @@ export class HeroService {
     )
   }
 
+  // Método para deletar o herói
   deleteHero(id: number): Observable<Hero>{
     const url = `${this.heroesUrl}/${id}`;
 
@@ -106,6 +107,27 @@ export class HeroService {
     );
 
   }
+
+  // Método para fazer requisição de busca por nome
+  // Retorna um observable de arr do tipo hero
+  searchHeroes(term: string): Observable<Hero[]>{
+
+    // Se o termo, com os espaços limpos for false retorna um arr vazio
+    if(!term.trim()){
+
+      return of([]);
+
+    }
+
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+
+      // Se a lista não estiver vazia dispara mensagem de heróis encontrados, se não, imprime de não encontrados
+      tap(x => x.length ? this.log(`found heroes matching "${term}"`) : this.log(`no heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    )
+
+  } 
+
 
   // header esperada para fazer post e put no server
   httpOptions ={
