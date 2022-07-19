@@ -15,3 +15,13 @@
         </a>
     </li>
 </ul>
+
+<!-- Criar novo herói -->
+<div>
+    <label for="new-hero">Hero name: </label>
+    <input id="new-hero" #heroName>
+
+    <!-- passa o valor de input para o metodo e limpa seu valor -->
+    <button type="button" class="add-button" (click)="add(heroName.value); heroName.value=''">Add Hero</button>
+
+</div>

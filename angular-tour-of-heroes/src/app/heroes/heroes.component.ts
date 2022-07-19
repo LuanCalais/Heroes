@@ -31,6 +31,18 @@ export class HeroesComponent implements OnInit {
         .subscribe(heroes => this.heroes = heroes);
   }
 
+  add(name: string): void{
+
+    name = name.trim();//Remove espaços no começo e no fim da string
+    if(!name){ return;} // se name não existir ele finaliza
+
+    // Adiciona o nome o herói como tipo Hero(pois é esse tipo que a service espera), e efetua o push na lista de heróis após o subscribe receber o observable
+    this.heroService.addHero({name} as Hero).subscribe(hero => {
+      this.heroes.push(hero);
+    })
+
+  }
+
   // Dead Code ----- Deixei para fins de consula
   // selectedHero?: Hero;
   // onSelect(hero: Hero): void {
