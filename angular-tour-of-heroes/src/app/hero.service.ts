@@ -6,11 +6,10 @@ import { MessageService } from './message.service'; //service in service - Messa
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // Tratativa de erros para caso a API tenha algum problema nas requisições 
+// Tap - Olha para os valores do observable, faz algo com ele e passa adiante 
 import { catchError, map, tap } from 'rxjs';
 
 @Injectable({
-
-
   providedIn: 'root' //Torna a service injetável na raiz da aplicação
 })
 export class HeroService {
@@ -26,6 +25,7 @@ export class HeroService {
   getHeroes(): Observable<Hero[]> {
     // Requisição http para pegar os heróis da API
     return this.http.get<Hero[]>(this.heroesUrl).pipe(
+      tap(_ => this.log('featched heroes')), // tap faz algo com o retorno e passa adiante, nesse caso seta a mensagem
       catchError(this.handleError<Hero[]>('getHeroes',[]))
     )
 
