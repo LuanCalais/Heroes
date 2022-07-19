@@ -8,7 +8,8 @@ import {
 /* 
  debounceTime - define um tempo antes de executar algo
  distinctUntilChanged - apenas considera entradas distintas
- switchMap - altera para um novo do mesmo tipo no fim da execução
+ switchMap - chama a searchService cada vez que o termo passa pelo debounce()
+ preserva a ordem de solicitação original enquanto retorna apenas o observável da chamada de método HTTP mais recente. 
 */
 
 
@@ -26,11 +27,13 @@ export class HeroSearchComponent implements OnInit {
   heroes$!: Observable<Hero[]>
 
   // Lista observable que recebe os termos em uma lista de string
+  // Subject é os dois, fonte de Observable e um Observable
   private searchTerms = new Subject<string>();
 
   constructor(private heroService: HeroService) { }
 
   // Push do termo da pesquisa dentro da ferramenta do observable
+  // não é uma boa prátiva passar os terms diretamente para o searchTerms, isso causaria um acumulo de requisições http
   search(term: string): void {
     this.searchTerms.next(term);
   }
@@ -44,7 +47,7 @@ export class HeroSearchComponent implements OnInit {
       // igora o termpo de entrada se ele for igual ao ultimo
       distinctUntilChanged(),
 
-      // no fim, altera para outro novo search sempre que o termo mudar
+      // no fim, altera para outro novo search sempre que o termo mudar, antes disso envia para searchHeroes na service
       switchMap((term: string) => this.heroService.searchHeroes(term))
 
     )
