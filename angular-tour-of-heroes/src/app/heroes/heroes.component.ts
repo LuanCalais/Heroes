@@ -43,6 +43,20 @@ export class HeroesComponent implements OnInit {
 
   }
 
+  delete(hero: Hero): void{
+
+    if(!hero){return;}
+
+    // filter remove o herói selecionado, armazenando em um arr os heróis diferentes do herói que chegou
+    // OBS - Se fosse "h => h === hero" retornaria apenas o herói selecionado
+    this.heroes = this.heroes.filter(h => h !== hero);
+
+    // Não existe nada para fazer no retorno do Observable, pois ele antecipa a remoção do herói da lista
+    // porém sem o subscribe() não é possível fazer nada no servidor, como regra, Observable não efetua sem subscribe()
+    this.heroService.deleteHero(hero.id).subscribe();
+
+  }
+
   // Dead Code ----- Deixei para fins de consula
   // selectedHero?: Hero;
   // onSelect(hero: Hero): void {
