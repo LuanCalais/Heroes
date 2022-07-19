@@ -29,6 +29,15 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
+  // Atualiza o heró 
+  save(): void{
+
+    // Se o herói for true, atualiza, e depois do subscribe ele retorna para a página anterior
+    if(this.hero){
+      this.heroService.updateHero(this.hero).subscribe(() => this.goBack)
+    }
+  }
+
   // @Input - decorator que traz do heroes.component.ts o herói selecionado
   // ? - Porque ele não começa com valor, inclusive só aparecerá o componente em heroes.component se ele for iniciado
   @Input() hero?:Hero;

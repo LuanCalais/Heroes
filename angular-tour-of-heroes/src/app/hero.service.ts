@@ -26,7 +26,7 @@ export class HeroService {
     // Requisição http para pegar os heróis da API
     return this.http.get<Hero[]>(this.heroesUrl).pipe(
       tap(_ => this.log('featched heroes')), // tap faz algo com o retorno e passa adiante, nesse caso seta a mensagem
-      catchError(this.handleError<Hero[]>('getHeroes',[]))
+      catchError(this.handleError<Hero[]>('getHeroes', []))
     )
 
     /*
@@ -38,7 +38,7 @@ export class HeroService {
 
   // @param operation - Nome da operação que parou
   // @param result - valor opcional de retorno
-  private handleError<T>(operation = 'operation', result?: T){
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
       // Imprime no console o erro retornado
@@ -60,12 +60,35 @@ export class HeroService {
   }
 
 
+  // busca o heroi por id, se não for encontrado será direcionado para a 404 
+  getHero(id: number): Observable<Hero> {
 
-  getHero(id: Number): Observable<Hero> {
+    // Consumimos a API trazendo o herói referente ao ID
+    const url = `${this.heroesUrl}/${id}`;
+
+    return this.http.get<Hero>(url).pipe(
+      tap(_ => this.log(`fetched hero id - ${id}`)),
+      catchError(this.handleError<Hero>(`getHero id=${id}`))
+    )
+
+    // Dead code para consulta
     // HEROES.find(h => h.id === id) ----- Busca um herói na lista de herói que possua o mesmo id que chegou como parametro
-    const hero = HEROES.find(h => h.id === id)!;
-    this.messageService.add(`HeroService say: encontrado herói id: ${id}`)
-    return of(hero);
+    // const hero = HEROES.find(h => h.id === id)!;
+    // this.messageService.add(`HeroService say: encontrado herói id: ${id}`)
+    // return of(hero);
+  }
+
+  // Método para atualizar detalher
+  updateHero(hero:Hero): Observable<any>{
+    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap(_ => this.log(`Updated hero id - ${hero.id}`)),
+      catchError(this.handleError<any>('updateHero'))
+    )
+  }
+
+  // header esperada para fazer o update no server
+  httpOptions ={
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
 
 }
